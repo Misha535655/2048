@@ -11,7 +11,7 @@ public class GameInstaller : MonoInstaller
     {
         Container.Bind<BlockNumber>().FromComponentInNewPrefab(block).AsSingle();
         Container.Bind<BlockSpawner>().FromComponentInHierarchy().AsSingle();
-        Container.Bind<ScoreController>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<ScoreController>().FromComponentInHierarchy().AsCached();
         Container.Bind<GameController>().FromComponentInHierarchy().AsSingle();
         
     }

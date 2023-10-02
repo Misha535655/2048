@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class ScoreController : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI scoreCount;
     private int _points = 0;
     public void AddPoints()
     {
-        _points++;
+        _points += 1;
         SetPoints(_points);
     }
 
@@ -20,6 +20,6 @@ public class ScoreController : MonoBehaviour
 
     private void SetPoints(int points)
     {
-        scoreText.text = points.ToString();
+        scoreCount.text = points.ToString();
     }
 }

@@ -5,6 +5,7 @@ using Zenject;
 
 public class BlockSpawner : MonoBehaviour
 {
+    
     [SerializeField] private float blockSize;
     [SerializeField] private float spacing;
     [Inject] private BlockNumber blockPrefab;

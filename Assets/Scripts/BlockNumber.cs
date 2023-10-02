@@ -20,7 +20,6 @@ public class BlockNumber : MonoBehaviour
    [SerializeField] private TextMeshProUGUI pointsText;
    [SerializeField] private Color[] blockColors;
 
-   [Inject] ScoreController _scoreController;
 
 
 
@@ -50,14 +49,11 @@ public class BlockNumber : MonoBehaviour
 
 
 
-    public void AddValue()
-    {
-
-        
+    public void IncrementValue()
+    { 
         BlockValue++;
         Debug.Log(BlockValue);
         IsMerged = true;
-        //_scoreController.AddPoints();
         UpdateBlock();
     }
 
@@ -70,7 +66,7 @@ public class BlockNumber : MonoBehaviour
     {
         if (block != null)
         {
-            block.AddValue();
+            block.IncrementValue();
             SetValue(CoordX, CoordY, 0);
             UpdateBlock();
         }

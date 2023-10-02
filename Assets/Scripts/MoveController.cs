@@ -10,24 +10,13 @@ public class MoveController : MonoBehaviour
 {
     [Inject] GameController gameController;
     [Inject] BlockSpawner spawner;
-    //[Inject] BlockNumber block;
+    [Inject] private ScoreController _scoreController;
+    [Inject] BlockNumber block;
 
     private bool anyBlockMoved;
     private void Start()
     {
         SwipeDetector.SwipeEvent += OnInput;
-    }
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-            OnInput(Vector2.left);
-        if (Input.GetKeyDown(KeyCode.D))
-            OnInput(Vector2.right);
-        if (Input.GetKeyDown(KeyCode.W))
-            OnInput(Vector2.up);
-        if (Input.GetKeyDown(KeyCode.S))
-            OnInput(Vector2.down);
-
     }
 
     private void OnInput(Vector2 direction)
@@ -82,6 +71,7 @@ public class MoveController : MonoBehaviour
                 if (blockToMerge != null)
                 {
                     block.MeargeBlocks(blockToMerge);
+                    _scoreController.AddPoints();
                     anyBlockMoved = true;
                     continue;
                 }
@@ -138,6 +128,32 @@ public class MoveController : MonoBehaviour
 
     private void GameChecker()
     {
+        bool lose = true;
 
+        for (int x = 0; x < spawner.fieldSize; x++)
+        {
+            for (int y = 0; y < spawner.fieldSize; y++)
+            {
+                if (spawner.field[x, y].BlockValue == block.MaxValue)
+                {
+                    gameController.Win();
+                }
+
+                if (lose && spawner.field[x, y].IsEmpty ||
+                    FindBlockToMerge(spawner.field[x, y], Vector2.up) ||
+                    FindBlockToMerge(spawner.field[x, y], Vector2.down) ||
+                    FindBlockToMerge(spawner.field[x,y], Vector2.left) ||
+                    FindBlockToMerge(spawner.field[x,y], Vector2.right)
+                    )
+                {
+                    lose = false; 
+                }
+            }
+        }
+
+        if (lose)
+        {
+            gameController.Lose();
+        }
     }
 }
