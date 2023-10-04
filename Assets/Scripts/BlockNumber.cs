@@ -8,30 +8,39 @@ using Zenject;
 
 public class BlockNumber : MonoBehaviour
 {
-   public int CoordX { get; private set; }
-   public int CoordY { get; private set; }
-   
-   public int BlockValue { get; private set; }
-   public int MaxValue = 11;
-   public bool IsEmpty => BlockValue == 0;
-   public bool IsMerged {  get; private set; }
-   private int Point => IsEmpty ? 0 : (int)Math.Pow(2, BlockValue);
-   [SerializeField] private Image blockImage;
-   [SerializeField] private TextMeshProUGUI pointsText;
-   [SerializeField] private Color[] blockColors;
+    public int CoordX { get; private set; }
+    public int CoordY { get; private set; }
+
+    public int BlockValue { get; private set; }
+    public int MaxValue = 11;
+    public bool IsEmpty => BlockValue == 0;
+    public bool IsMerged { get; private set; }
+    public int Point => IsEmpty ? 0 : (int)Math.Pow(2, BlockValue);
+    [SerializeField] private Image blockImage;
+    [SerializeField] private TextMeshProUGUI pointsText;
+    [SerializeField] public Color[] blockColors;
+    private BlockAnimation currentAnimation;
 
 
 
 
-   public void SetValue(int x, int y, int value)
+   public void SetValue(int x, int y, int value, bool updateUI = true)
    {
       CoordX = x;
       CoordY = y;
       BlockValue = value;
-      UpdateBlock();
+      if(updateUI)
+        {
+            UpdateBlock();
+        }
+      
    }
+    public void SetAnimation(BlockAnimation animation)
+    {
+        currentAnimation = animation;
+    }
 
-   private void UpdateBlock()
+   public void UpdateBlock()
    {
        if (!IsEmpty)
       {
@@ -54,7 +63,6 @@ public class BlockNumber : MonoBehaviour
         BlockValue++;
         Debug.Log(BlockValue);
         IsMerged = true;
-        UpdateBlock();
     }
 
     public void ResetMearge()
@@ -62,13 +70,14 @@ public class BlockNumber : MonoBehaviour
         IsMerged = false;
     }
 
-    public void MeargeBlocks(BlockNumber block)
+    public void MeargeBlocks(BlockNumber block, BlockAnimationController blockAnimationController)
     {
         if (block != null)
         {
+            blockAnimationController.Transition(this, block, false);
             block.IncrementValue();
             SetValue(CoordX, CoordY, 0);
-            UpdateBlock();
+            
         }
         else
         {
@@ -76,10 +85,18 @@ public class BlockNumber : MonoBehaviour
         }
     }
 
-    public void MoveToBlock(BlockNumber block)
+    public void MoveToBlock(BlockNumber block, BlockAnimationController blockAnimationController)
     {
-        block.SetValue(block.CoordX, block.CoordY, BlockValue);
+        blockAnimationController.Transition(this, block, false );
+        block.SetValue(block.CoordX, block.CoordY, BlockValue, false);
         SetValue(CoordX, CoordY, 0);
         UpdateBlock();
+    }
+    public void DestroyAnimation()
+    {
+        if(currentAnimation != null)
+        {
+            currentAnimation.Destroy();
+        }
     }
 }

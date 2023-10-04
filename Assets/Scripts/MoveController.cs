@@ -12,6 +12,7 @@ public class MoveController : MonoBehaviour
     [Inject] BlockSpawner spawner;
     [Inject] private ScoreController _scoreController;
     [Inject] BlockNumber block;
+    [Inject] BlockAnimationController blockAnimationController;
 
     private bool anyBlockMoved;
     private void Start()
@@ -70,7 +71,7 @@ public class MoveController : MonoBehaviour
                 var blockToMerge = FindBlockToMerge(block, direction);
                 if (blockToMerge != null)
                 {
-                    block.MeargeBlocks(blockToMerge);
+                    block.MeargeBlocks(blockToMerge, blockAnimationController);
                     _scoreController.AddPoints();
                     anyBlockMoved = true;
                     continue;
@@ -79,7 +80,7 @@ public class MoveController : MonoBehaviour
                 var emptyBlock = FindEmptyBlock(block, direction);
                 if(emptyBlock != null)
                 {
-                    block.MoveToBlock(emptyBlock);
+                    block.MoveToBlock(emptyBlock, blockAnimationController);
                     anyBlockMoved = true;
                 }
             }

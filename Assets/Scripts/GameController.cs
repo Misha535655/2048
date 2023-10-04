@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Zenject;
 
 public class GameController : MonoBehaviour
@@ -39,5 +40,10 @@ public class GameController : MonoBehaviour
         GameStarted = false;
         resultText.text = "You Lose!";
 
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(0);
     }
 }

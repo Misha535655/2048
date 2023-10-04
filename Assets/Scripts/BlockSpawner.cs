@@ -9,6 +9,7 @@ public class BlockSpawner : MonoBehaviour
     [SerializeField] private float blockSize;
     [SerializeField] private float spacing;
     [Inject] private BlockNumber blockPrefab;
+    [Inject] private BlockAnimationController blockAnimationController;
     [SerializeField] private RectTransform container;
     public int fieldSize = 3;
     public BlockNumber[,] field;
@@ -81,7 +82,11 @@ public class BlockSpawner : MonoBehaviour
         else
         {
             var block = emptyBlocks[Random.Range(0, emptyBlocks.Count)];
-            block.SetValue(block.CoordX, block.CoordY, 1);
+            block.SetValue(block.CoordX, block.CoordY, 1, false);
+
+            blockAnimationController.Appear(block);
+
+
         }
     }
 
